@@ -1,0 +1,80 @@
+body {
+  color: white;
+  font-family: Ubuntu, Arial;
+}
+
+.calculator-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 238px;
+  gap: 10px;
+  background-color: rgb(49, 49, 49);
+  padding: 10px;
+  border-radius: 18px;
+}
+
+.display-container {
+  height: 80px;
+  width: 100%;
+  border: 1px solid black;
+  border-radius: 18px;
+  padding: 15px;
+  box-sizing: border-box;
+}
+
+.display {
+  font-size: 30px;
+  text-align: right;
+  vertical-align: middle;
+  line-height: 50px;
+  background-color: white;
+  color: black;
+}
+
+.digit-container {
+  display: flex;
+  gap: 10px;
+  flex: 1;
+}
+
+.row {
+  display: flex;
+  flex-grow: 1;
+  gap: 10px;
+}
+
+.digit {
+  min-width: 50px;
+  height: 50px;
+  border: 1px solid rgb(255, 255, 255);
+  text-align: center;
+  vertical-align: middle;
+  line-height: 50px;
+  border-radius: 18px;
+  flex: 1;
+}
+
+.digit:hover {
+  color: black;
+  background-color: white;
+  border-color: white;
+  cursor: pointer;
+}
+
+.mid-left-section {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.right-section {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+#subtract,
+#decimal {
+  flex: 0;
+}
