@@ -11,6 +11,11 @@ const digit = document.querySelectorAll(".digit");
 for (i of digit) {
   i.addEventListener("click", e => {
     /* console.log(e.target); */
+    if (firstNumber && secondNumber === undefined) secondNumber = e.target.textContent; 
+    else if (firstNumber) {
+      secondNumber += e.target.textContent;
+      console.log(secondNumber);
+    }
     // populate the display
     populateDisplay(e.target.textContent);
   })
@@ -19,14 +24,28 @@ for (i of digit) {
 const operatorDiv = document.querySelectorAll(".operator");
 for (i of operatorDiv) {
   i.addEventListener("click", e => {
+    if (secondNumber !== undefined) return;
+
     // select the operator
     operator = e.target.textContent;
-    if (operatorCheck()) updateOperator(operator); // contains any other operator -> update the operator
-    else {
-      populateDisplay(operator);
-    }
+    // check for another operator click
+    if (operatorCheck()) updateOperator(operator);// contains any other operator -> update the operator
+    else populateDisplay(operator);
+    // save the first number
+    firstNumber = Number(displayValue.slice(0, -1));
+
+    console.log(firstNumber);
+    // TODO: add a decimal check
   })
 }
+
+const equalDiv = document.querySelector(".equal");
+equalDiv.addEventListener("click", e => {
+  if (firstNumber && secondNumber && operator) {
+    const result = opearate(operator, firstNumber, Number(secondNumber));
+    showResult(result)
+  }
+})
 
 function operatorCheck() {
   if (displayValue.includes("+") ||
@@ -41,6 +60,7 @@ function updateOperator(operator) {
   displayValue = displayValue.slice(0, -1);
   displayValue += operator;
   display.textContent = displayValue;
+  console.log(displayValue);
 }
 
 function populateDisplay(context) {
@@ -49,7 +69,16 @@ function populateDisplay(context) {
 }
 
 function opearate(operator, x, y) {
-  if (operator === "+") return add(x, y)
+  switch (operator) {
+    case "+":
+      return add(x, y);
+    case "-":
+      return subtract(x, y);
+    case "*":
+      return multiply(x, y);
+    case "/":
+      return divide(x, y);
+  }
 }
 
 function add(x, y) {
@@ -67,4 +96,9 @@ function multiply(x, y) {
 function divide(x, y) {
   if (y === 0) return "Cannot divide by 0"
   return x / y;
+}
+
+function showResult(result) {
+  display.textContent = result;
+  displayValue = display.textContent;
 }
