@@ -6,15 +6,15 @@ let displayValue;
 const operatorArr = ["+", "-", "*", "/"];
 
 const display = document.querySelector(".display");
+const initialDisplay = display.textContent;
 
 const digit = document.querySelectorAll(".digit");
 for (i of digit) {
   i.addEventListener("click", e => {
-    /* console.log(e.target); */
-    if (firstNumber && secondNumber === undefined) secondNumber = e.target.textContent; 
-    else if (firstNumber) {
+    // assign the second number if operator exists
+    if (operator && secondNumber === undefined) secondNumber = e.target.textContent; 
+    else if (operator) {
       secondNumber += e.target.textContent;
-      console.log(secondNumber);
     }
     // populate the display
     populateDisplay(e.target.textContent);
@@ -24,7 +24,7 @@ for (i of digit) {
 const operatorDiv = document.querySelectorAll(".operator");
 for (i of operatorDiv) {
   i.addEventListener("click", e => {
-    if (secondNumber !== undefined) return;
+    if (secondNumber !== undefined || display.textContent === initialDisplay) return;
 
     // select the operator
     operator = e.target.textContent;
@@ -32,7 +32,7 @@ for (i of operatorDiv) {
     if (operatorCheck()) updateOperator(operator);// contains any other operator -> update the operator
     else populateDisplay(operator);
     // save the first number
-    firstNumber = Number(displayValue.slice(0, -1));
+    firstNumber = displayValue.slice(0, -1);
 
     console.log(firstNumber);
     // TODO: add a decimal check
@@ -41,11 +41,20 @@ for (i of operatorDiv) {
 
 const equalDiv = document.querySelector(".equal");
 equalDiv.addEventListener("click", e => {
+  console.log(`first number: ${firstNumber} type: ${typeof(firstNumber)}`);
+  console.log(`second number: ${secondNumber} type: ${typeof(secondNumber)}`);
+  console.log(`operator: ${operator} type: ${typeof(operator)}`);
   if (firstNumber && secondNumber && operator) {
-    const result = opearate(operator, firstNumber, Number(secondNumber));
+    const result = opearate(operator, Number(firstNumber), Number(secondNumber));
     showResult(result)
+    secondNumber = undefined;
+    firstNumber = result;
+    operator = undefined;
   }
 })
+
+const clearDiv = document.querySelector(".clear");
+clearDiv.addEventListener("click", clearDisplay);
 
 function operatorCheck() {
   if (displayValue.includes("+") ||
@@ -64,11 +73,18 @@ function updateOperator(operator) {
 }
 
 function populateDisplay(context) {
-  display.textContent += context;
+  if (display.textContent === initialDisplay) {
+    display.textContent = context;
+  }
+  else {  
+    display.textContent += context;
+  }
   displayValue = display.textContent;
+  console.log(displayValue);
 }
 
 function opearate(operator, x, y) {
+  console.log("here we go")
   switch (operator) {
     case "+":
       return add(x, y);
@@ -102,3 +118,18 @@ function showResult(result) {
   display.textContent = result;
   displayValue = display.textContent;
 }
+
+function clearDisplay() {
+  display.textContent = initialDisplay;
+  displayValue = display.textContent;
+  firstNumber = undefined;
+  secondNumber = undefined;
+  operator = undefined;
+}
+
+/* TODO:
+limit the decimal numbers
+handle the decimal point
+handle negative numbers properly
+ability to type with numeric keyboard
+divide by zero error handler */
