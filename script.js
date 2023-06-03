@@ -24,6 +24,7 @@ for (i of digit) {
 const operatorDiv = document.querySelectorAll(".operator");
 for (i of operatorDiv) {
   i.addEventListener("click", e => {
+    calculate();
     if (secondNumber !== undefined || display.textContent === initialDisplay) return;
 
     // select the operator
@@ -41,16 +42,10 @@ for (i of operatorDiv) {
 
 const equalDiv = document.querySelector(".equal");
 equalDiv.addEventListener("click", e => {
-  console.log(`first number: ${firstNumber} type: ${typeof(firstNumber)}`);
+  /* console.log(`first number: ${firstNumber} type: ${typeof(firstNumber)}`);
   console.log(`second number: ${secondNumber} type: ${typeof(secondNumber)}`);
-  console.log(`operator: ${operator} type: ${typeof(operator)}`);
-  if (firstNumber && secondNumber && operator) {
-    const result = opearate(operator, Number(firstNumber), Number(secondNumber));
-    showResult(result)
-    secondNumber = undefined;
-    firstNumber = result;
-    operator = undefined;
-  }
+  console.log(`operator: ${operator} type: ${typeof(operator)}`); */
+  calculate();
 })
 
 const clearDiv = document.querySelector(".clear");
@@ -112,6 +107,16 @@ function multiply(x, y) {
 function divide(x, y) {
   if (y === 0) return "Cannot divide by 0"
   return x / y;
+}
+
+function calculate() {
+  if (firstNumber && secondNumber && operator) {
+    const result = parseFloat((opearate(operator, Number(firstNumber), Number(secondNumber))).toFixed(6));
+    showResult(result)
+    secondNumber = undefined;
+    firstNumber = result;
+    operator = undefined;
+  }
 }
 
 function showResult(result) {
