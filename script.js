@@ -11,6 +11,9 @@ const initialDisplay = display.textContent;
 const digit = document.querySelectorAll(".digit");
 for (i of digit) {
   i.addEventListener("click", e => {
+    // check for display lenght and adjust the size
+    if (sizeCheck() === false) return;
+
     // assign the second number if operator exists
     if (operator && secondNumber === undefined) secondNumber = e.target.textContent; 
     else if (operator) {
@@ -25,6 +28,9 @@ const operatorDiv = document.querySelectorAll(".operator");
 for (i of operatorDiv) {
   i.addEventListener("click", e => {
     calculate();
+    // check for display lenght and adjust the size
+    if (sizeCheck() === false) return;
+
     if (secondNumber !== undefined || display.textContent === initialDisplay) return;
 
     // select the operator
@@ -46,17 +52,34 @@ equalDiv.addEventListener("click", e => {
   console.log(`second number: ${secondNumber} type: ${typeof(secondNumber)}`);
   console.log(`operator: ${operator} type: ${typeof(operator)}`); */
   calculate();
+
+  // check for display lenght and adjust the size
+  if (sizeCheck() === false) return;
+})
+
+const decimal = document.querySelector(".decimal")
+decimal.addEventListener("click", () => {
+  if (operatorCheck() || decimalCheck()) return;
+  // check for display lenght and adjust the size
+  if (sizeCheck() === false) return;
+
+  // populate the display
+  populateDisplay(".");
 })
 
 const clearDiv = document.querySelector(".clear");
 clearDiv.addEventListener("click", clearDisplay);
 
 function operatorCheck() {
-  if (displayValue.includes("+") ||
-  displayValue.includes("-") ||
-  displayValue.includes("/") ||
-  displayValue.includes("*")) {
-    return true;
+  switch (displayValue.slice(-1)) {
+    case "+":
+      return true;
+    case "-":
+      return true;
+    case "*":
+      return true;
+    case "/":
+      return true;
   }
 }
 
@@ -79,7 +102,6 @@ function populateDisplay(context) {
 }
 
 function opearate(operator, x, y) {
-  console.log("here we go")
   switch (operator) {
     case "+":
       return add(x, y);
@@ -105,13 +127,17 @@ function multiply(x, y) {
 }
 
 function divide(x, y) {
-  if (y === 0) return "Cannot divide by 0"
+  if (y === 0) return false;
   return x / y;
 }
 
 function calculate() {
   if (firstNumber && secondNumber && operator) {
-    const result = parseFloat((opearate(operator, Number(firstNumber), Number(secondNumber))).toFixed(6));
+    let result = opearate(operator, Number(firstNumber), Number(secondNumber));
+    if (result === false) result = divZeroErr();
+    else result = parseFloat(result.toFixed(6));
+    
+    console.log(result);
     showResult(result)
     secondNumber = undefined;
     firstNumber = result;
@@ -132,9 +158,30 @@ function clearDisplay() {
   operator = undefined;
 }
 
+function divZeroErr() {
+  display.style.fontSize = "16px";
+  return "Cannot divide by 0";
+}
+
+function sizeCheck() {
+  let displayLength = display.textContent.length;
+
+  if (displayLength <= 10) display.style.fontSize = "30px";
+  if (displayLength > 10 && displayLength <=13) display.style.fontSize = "25px";
+  if (displayLength > 13 && displayLength <=17) display.style.fontSize = "20px";
+  if (displayLength > 17) return false;
+}
+
+function decimalCheck() {
+  if (firstNumber === undefined) {
+    if (displayValue.inludes(".")) return true;
+  }
+
+  
+}
+
 /* TODO:
-limit the decimal numbers
 handle the decimal point
-handle negative numbers properly
+-refactor the number assingment -> first and last numbers get updated as they are written out
 ability to type with numeric keyboard
 divide by zero error handler */
