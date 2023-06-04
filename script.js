@@ -11,16 +11,20 @@ const initialDisplay = display.textContent;
 const digit = document.querySelectorAll(".digit");
 for (i of digit) {
   i.addEventListener("click", e => {
+    const number = e.target.textContent;
     // check for display lenght and adjust the size
     if (sizeCheck() === false) return;
 
     // assign the second number if operator exists
-    if (operator && secondNumber === undefined) secondNumber = e.target.textContent; 
+    if (operator && secondNumber === undefined) secondNumber = number; 
     else if (operator) {
-      secondNumber += e.target.textContent;
+      secondNumber += number;
     }
-    // populate the display
-    populateDisplay(e.target.textContent);
+    // populate the display and assing the context to the first number
+    if (firstNumber === undefined) firstNumber = number;
+    else if (!operator) firstNumber += number;
+    
+    populateDisplay(number);
   })
 }
 
@@ -60,10 +64,13 @@ equalDiv.addEventListener("click", e => {
 const decimal = document.querySelector(".decimal")
 decimal.addEventListener("click", () => {
   if (operatorCheck() || decimalCheck()) return;
-  // check for display lenght and adjust the size
+  // check for display length and adjust the size
   if (sizeCheck() === false) return;
 
   // populate the display
+  if (secondNumber === undefined) firstNumber += ".";
+  else secondNumber += ".";
+  
   populateDisplay(".");
 })
 
@@ -173,15 +180,19 @@ function sizeCheck() {
 }
 
 function decimalCheck() {
-  if (firstNumber === undefined) {
-    if (displayValue.inludes(".")) return true;
+  if (firstNumber !== undefined && secondNumber === undefined) {
+    // cases where a decimal will not be printed
+    if (firstNumber.toString().includes(".")) return true;
+    return false;
   }
-
+  else if (secondNumber !== undefined) {
+    if (secondNumber.toString().includes(".")) return true;
+    return false;
+  }
+  else return true;
   
 }
 
 /* TODO:
-handle the decimal point
--refactor the number assingment -> first and last numbers get updated as they are written out
-ability to type with numeric keyboard
-divide by zero error handler */
+-more testing
+ability to type with numeric keyboard */
