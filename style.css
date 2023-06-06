@@ -1,5 +1,5 @@
 body {
-  color: white;
+  color: #393e41;
   font-family: Ubuntu, Arial;
 }
 
@@ -9,7 +9,7 @@ body {
   align-items: center;
   width: 238px;
   gap: 10px;
-  background-color: rgb(49, 49, 49);
+  background-color: #393e41;
   padding: 10px;
   border-radius: 18px;
 }
@@ -28,7 +28,7 @@ body {
   text-align: right;
   vertical-align: middle;
   line-height: 50px;
-  background-color: white;
+  background-color: #d3d0cb;
   color: black;
 }
 
@@ -51,22 +51,33 @@ body {
 .clear {
   min-width: 50px;
   height: 50px;
-  border: 1px solid rgb(255, 255, 255);
+  background-color: #368F8B;
   text-align: center;
   vertical-align: middle;
   line-height: 50px;
   border-radius: 18px;
   flex: 1;
+  user-select: none;
+}
+
+.operator,
+.equal,
+.clear {
+  background-color: #D17A22;
 }
 
 .digit:hover,
+.decimal:hover {
+  color: #d3d0cb;
+  background-color: #4EBCB6;
+  cursor: pointer;
+}
+
 .operator:hover,
 .equal:hover,
-.decimal:hover,
 .clear:hover {
-  color: black;
-  background-color: white;
-  border-color: white;
+  color: #d3d0cb;
+  background-color: #E29950;
   cursor: pointer;
 }
 
@@ -82,7 +93,7 @@ body {
   gap: 10px;
 }
 
-#subtract,
+#o-,
 #decimal {
   flex: 0;
 }
