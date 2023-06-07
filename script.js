@@ -218,11 +218,3 @@ function decimalCheck() {
   
 }
 
-/* TODO:
--more testing
-ability to type with numeric keyboard
-CSS refactor and more colors */
-/* DONE:
-small refactor,
-added color coding
-ability to type with keyboard */
